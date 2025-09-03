@@ -1,1 +1,32 @@
+version: "3.9"
+services:
+api:
+image: node:18
+working_dir: /app
+volumes:
+- ./:/app
+command: sh -c "npm i && npm run dev"
+ports:
+- "4000:4000"
+environment:
+- ENGINE=${ENGINE}
+- VALHALLA_URL=${VALHALLA_URL}
+- GRAPHHOPPER_URL=${GRAPHHOPPER_URL}
+- PORT=4000
+depends_on:
+- valhalla
+# switch depends_on to graphhopper if you prefer
 
+
+valhalla:
+image: ghcr.io/valhalla/valhalla:latest
+ports:
+- "8002:8002"
+# for production, mount data and config volumes; this quickstart uses defaults
+
+
+graphhopper:
+image: ghcr.io/graphhopper/graphhopper:latest
+ports:
+- "8989:8989"
+# set GH config and OSM data via volume/env; provi
